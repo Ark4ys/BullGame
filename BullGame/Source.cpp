@@ -88,5 +88,5 @@ int choice()
 		choice = 0; // Signal une erreur
 	}
 	return choice;
-
 }
+// Faire en sort qu'il est possiblité de choisir 1 des 2 jeu
