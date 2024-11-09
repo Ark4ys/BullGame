@@ -1,11 +1,10 @@
 #pragma once
-#include <string>
 #include <iostream>
+#include <string>
 
 class BullCow
 {
-public://rend la class public et utlisable dans d'autre class enfant
+public:
 	bool PlayAgain();
-	
 };
 

@@ -1,17 +1,46 @@
-//Permet de mettre dans la 
 #include <iostream>
 #include <string> // Pour manipuler des chaine de caractères
 #include "BullCow.h"
+#include "PowerFour.h"
+#include "Source.h"
+
 using namespace std;
 
 bool playAgain = true;
 string playerWord;
 
+bool powerFour = true;
+
 //Fonction pour l'introduction
 void intro(int number_lettres) 
 {
-	cout << "Bienvenue dans le jeu BullGame" << endl;
-	cout << "Pouvez-vous deviner le mot avec" << number_lettres << "lettres ?" << endl;
+	// Changer l'intro pour dire montrer au joueur qui a le choix entre 2 jeu
+	cout << "Bienvenue, a quel jeu voulez vous jouer ?\n";
+	cout << "1 = BullGame\n";
+	cout << "2 = POwerFour\n";
+
+}
+
+int choixJeu()
+{
+	int choix;
+	cout << "Choississez un jeu (1 ou 2) :";
+	cin >> choix;
+
+	//Verifie si l'utilisateur a fait un chooix valide
+	switch (choix)
+	{
+	case 1:
+		cout << "Vous avez choisi BullGame.\n";
+		break;
+	case 2:
+		cout << "Vous avez choisie POwerFour.\n";
+		break;
+	default:
+		cout << "Votre choix et invalide. \n";
+		choix = 0; // Signal une erreur
+	}
+	return choix;
 }
 
 int main()
@@ -19,45 +48,77 @@ int main()
 	//Constante -> CAPS LOCK = convention de nommage avec majuscules
 	constexpr int NUMBER_LETTRE = 4;
 	
-	BullCow game = BullCow();
-	
-	while (playAgain)
+	//Affiche le menu de choix de jeu
+	intro(NUMBER_LETTRE);
+	int choix = choixJeu();
+
+	//Verifie le choix du joueur
+	if (choix == 1)
 	{
-		// Appel de la fonction d'introduction
-		intro(NUMBER_LETTRE);
+		BullCow Game = BullCow();
 
-		//Variable pour stocker le mot du joueur
-		
-
-		// Demande au joueur de rentrer un mot
-		cout << "Entrez un mot de " << NUMBER_LETTRE << "lettre :";
-		cin >> playerWord; // LIre la ligne entièrement, pas juste le premier mot
-
-		// Vérifier si la longueur du mot est correcte
-		if (playerWord.length() == NUMBER_LETTRE)
+		while (playAgain)
 		{
-			cout << "Vous avez entré le mot :" << playerWord << endl;
+			//Appel de la fonction d'introduction BullGame
+			cout << "Bienvenue dans le jeu BullGame !" << endl;
+			cout << "Pouvez-vous devinier le mot de " << NUMBER_LETTRE << "lettre ?" << endl;
+
+			// Demande au joueur de rentrer un mot
+			cout << "Entrez un mot de " << NUMBER_LETTRE << "lettre :";
+			cin >> playerWord; // LIre la ligne entièrement, pas juste le premier mot
+
+			// Vérifier si la longueur du mot est correcte
+			if (playerWord.length() == NUMBER_LETTRE)
+			{
+				cout << "Vous avez entré le mot :" << playerWord << endl;
+			}
+			else
+			{
+				cout << "Erreur : Le mot doit comporter exactement" << NUMBER_LETTRE << "lettres." << endl;
+			}
+			playAgain = Game.PlayAgain();
+			playerWord = "";
+
 		}
-		else
+	}
+
+	else if (choix == 2)
+	{
+		PowerFour Game;
+		char joueur1 = 'X';
+		char joueur2 = 'O';
+		char jetonActuel = joueur1;
+		bool jeuEnCours = true;
+
+		while (jeuEnCours)
 		{
-			cout << "Erreur : Le mot doit comporter exactement" << NUMBER_LETTRE << "lettres." << endl;
+			Game.afficherGrille(); //Affiche grille
+
+			int col;
+			cout << "joueur " << jetonActuel << ", choisissez une colonne (0-6) : ";
+			cin >> col;
+
+			if (Game.placerJeton(col, jetonActuel))
+			{
+				if (Game.verifierVictoire(jetonActuel))
+				{
+					Game.afficherGrille();
+					cout << "Le Joueur " << jetonActuel << " a gagné !\n";
+					jeuEnCours = false;
+				}
+				else
+				{
+					jetonActuel = (jetonActuel == joueur1) ? joueur2 : joueur1;
+				}
+			}
 		}
 		
-		playAgain = game.PlayAgain();
-		playerWord = "";
-
-		//Definie la taille de la grille du PowerFour
-		const int rows = 6;
-		const int cols = 7;
-
+		cout << "Bienvenue dans le jeu PowerFour !" << endl;
+		// Logique du jeu ...
 	}
 
 	cout << "Fin du jeu" << endl;
 	return 0;
-
-	// Demande au joueur si il veux rejouer
-
-
 
 	// Find a solution to let player input his value - Ask for his word
 
@@ -65,28 +126,3 @@ int main()
 
 	// Check the lengh between my (master) word or "player word
 }
-int choice()
-{
-	int choice;
-	cout << "Choice a Game\n"; // \n = retour de ligne
-	cout << "1 - BullGame\n";
-	cout << "2 - PowerFour\n";
-
-	cout << "Choice: ";
-	cin >> choice; // cout affiche le texte, cin attend que l'utilisateur tape un nombre appuie sur entrée et est alors stockée dans la variable
-
-	switch (choice)
-	{
-	case 1:
-		cout << "You picked 1\n";
-		break;
-	case 2 :
-		cout << "You picked 2\n";
-		break;
-	default :
-		cout << "Your choise is invalid. \n";
-		choice = 0; // Signal une erreur
-	}
-	return choice;
-}
-// Faire en sort qu'il est possiblité de choisir 1 des 2 jeu
