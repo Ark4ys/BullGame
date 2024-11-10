@@ -1,8 +1,7 @@
 #include <iostream>
-#include <string> // Pour manipuler des chaine de caractËres
+#include <string> // Pour manipuler des chaine de caract√®res
 #include "BullCow.h"
 #include "PowerFour.h"
-#include "Source.h"
 
 using namespace std;
 
@@ -65,12 +64,12 @@ int main()
 
 			// Demande au joueur de rentrer un mot
 			cout << "Entrez un mot de " << NUMBER_LETTRE << "lettre :";
-			cin >> playerWord; // LIre la ligne entiËrement, pas juste le premier mot
+			cin >> playerWord; // LIre la ligne enti√®rement, pas juste le premier mot
 
-			// VÈrifier si la longueur du mot est correcte
+			// V√©rifier si la longueur du mot est correcte
 			if (playerWord.length() == NUMBER_LETTRE)
 			{
-				cout << "Vous avez entrÈ le mot :" << playerWord << endl;
+				cout << "Vous avez entr√© le mot :" << playerWord << endl;
 			}
 			else
 			{
@@ -103,7 +102,7 @@ int main()
 				if (Game.verifierVictoire(jetonActuel))
 				{
 					Game.afficherGrille();
-					cout << "Le Joueur " << jetonActuel << " a gagnÈ !\n";
+					cout << "Le Joueur " << jetonActuel << " a gagn√© !\n";
 					jeuEnCours = false;
 				}
 				else
