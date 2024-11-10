@@ -98,7 +98,7 @@ int main()
 			cout << "joueur " << jetonActuel << ", choisissez une colonne (0-6) : ";
 			cin >> col;
 
-			if (Game.placerJeton(col, jetonActuel))
+			if (Game.JouerCoup(col, jetonActuel))
 			{
 				if (Game.verifierVictoire(jetonActuel))
 				{

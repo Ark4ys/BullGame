@@ -1,76 +1,117 @@
 #include "PowerFour.h"
+#include <windows.h>
 #include <iostream>
 
 PowerFour::PowerFour()
 {
-	grille = std::vector<std::vector<char>>(ROWS, std::vector<char>(COLS, ' '));
+	grille = std::vector<std::vector<char>>(LIGNES, std::vector<char>(COLONNES, ' '));
 }
 
 void PowerFour::afficherGrille() const
 {
-	for (int i = 0; i < ROWS; ++i)
+	system("cls");//donne l'insruction de clear la console
+	// Parcours chaque ligne de la grille
+	for (int i = 0; i < LIGNES; ++i)
 	{
-		for (int j = 0; j < COLS; ++j)
+		// Parcours chaque colonne
+		for (int j = 0; j < COLONNES; ++j)
 		{
-			std::cout << "|" << grille[i][j];
+			// Affiche une cellule de la grille
+			std::cout << "|" << grille[i][j] << " ";
 		}
+		std::cout << "|\n";  // Fin de la ligne
 	}
-	std::cout << "0 1 2 3 4 5 6 \n"; //Affiche les colonne
-}
 
-bool PowerFour::placerJeton(int col, char jeton)
-{
-	if (col < 0 || col >= COLS)
+	// Affiche la ligne de séparation en bas
+	for (int j = 0; j < COLONNES; ++j)
 	{
-		std::cout << "Colonne Invalide. Choisissez une colonne entre 0 et 6.\n";
-		return false;
+		std::cout << "---";
 	}
-	for (int row = ROWS - 1; row >= 0; --row)
+	std::cout << "-\n"; // Fin de ligne de séparation
+}
+	//for (int i = 0; i < LIGNES; ++i)
+	//{
+	//	for (int j = 0; j < COLONNES; ++j)
+	//	{
+	//		std::cout << "|" << grille[i][j] << " ";
+	//	}
+	//	std::cout << "|\n";
+	//}
+	//std::cout <<"-----------------------------\n";
+	//std::cout << "0 1 2 3 4 5 6 \n"; //Affiche les colonne
+
+bool PowerFour::JouerCoup(int colonne, char joueur)
+{
+	if (colonne < 0 || colonne >= COLONNES) return false;
+
+	for (int i = LIGNES - 1; i >= 0; --i)
 	{
-		if (grille[row][col] == ' ')
+		if (grille[i][colonne] == ' ')
 		{
-			grille[row][col] = jeton;
+			grille[i][colonne] = joueur;
 			return true;
 		}
 	}
-	std::cout << "Colonne pleine. Choisissez une autre colonne.\n";
+	return false; // Colonne pleine
+}
+
+bool PowerFour::verifierVictoire(char joueur) const
+{
+	for (int ligne = 0; ligne < LIGNES; ++ligne)
+	{
+		for (int colonne = 0; colonne < COLONNES; ++colonne)
+		{
+			if (grille[ligne][colonne] == joueur)
+			{
+				if (verifierLigne(ligne, colonne, joueur) ||
+					verifierColonne(ligne, colonne, joueur) ||
+					verifierDiagonaleDescendante(ligne, colonne, joueur) ||
+					verifierDiagonaleMontante(ligne, colonne, joueur))
+				{
+					return true;
+				}
+			}
+		}
+	}
 	return false;
 }
 
-bool PowerFour::verifierVictoire(char jeton) const
+bool PowerFour::verifierLigne(int ligne, int colonne, char joueur) const
 {
-	//Verifie les lignes
-	for (int row = 0; row < ROWS; ++row)
+	if (colonne <= COLONNES - 4)
 	{
-		for (int col = 0; col <= COLS - 4; ++col)
-		{
-			if (grille[row][col] == jeton && grille[row][col + 1] == jeton && grille[row][col + 2] == jeton && grille[row][col + 3] == jeton)
-			{
-				return true;
-			}
-		}
+		return grille[ligne][colonne] == joueur && grille[ligne][colonne + 1] == joueur &&
+			grille[ligne][colonne + 2] == joueur && grille[ligne][colonne + 3] == joueur;
 	}
-	// Verifie les colonnes
-	for (int col = 0; col < COLS; ++col)
+	return false;
+}
+
+bool PowerFour::verifierColonne(int ligne, int colonne, char joueur) const
+{
+	if (ligne <= LIGNES - 4)
 	{
-		for (int row = 0; row <= ROWS - 4; ++row)
-		{
-			if (grille[row][col] == jeton && grille[row + 1][col] == jeton && grille[row + 2][col] == jeton && grille[row + 3][col] == jeton)
-			{
-				return true;
-			}
-		}
+		return grille[ligne][colonne] == joueur && grille[ligne + 1][colonne] == joueur &&
+			grille[ligne + 2][colonne] == joueur && grille[ligne + 3][colonne] == joueur;
 	}
-	// Verifie les diagonales montantes
-	for (int row = 3; row < ROWS; ++row)
+	return false;
+}
+
+bool PowerFour::verifierDiagonaleDescendante(int ligne, int colonne, char joueur) const
+{
+	if (ligne <= LIGNES - 4 && colonne <= COLONNES - 4)
 	{
-		for (int col = 0; row <= COLS - 4; ++row)
-		{
-			if (grille[row][col] == jeton && grille[row - 1][col + 1] == jeton && grille[row - 2][col + 2] == jeton && grille[row - 3][col + 3] == jeton)
-			{
-				return true;
-			}
-		}
+		return grille[ligne][colonne] == joueur && grille[ligne + 1][colonne + 1] == joueur &&
+			grille[ligne + 2][colonne + 2] == joueur && grille[ligne + 3][colonne + 3] == joueur;
+	}
+	return false;
+}
+
+bool PowerFour::verifierDiagonaleMontante(int ligne, int colonne, char joueur) const
+{
+	if (ligne >= 3 && colonne <= COLONNES - 4)
+	{
+		return grille[ligne][colonne] == joueur && grille[ligne - 1][colonne + 1] == joueur &&
+			grille[ligne - 2][colonne + 2] == joueur && grille[ligne - 3][colonne + 3] == joueur;
 	}
 	return false;
 }
