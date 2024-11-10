@@ -81,44 +81,7 @@ int main()
 
 		}
 	}
-
-	else if (choix == 2)
-	{
-		PowerFour Game;
-		char joueur1 = 'X';
-		char joueur2 = 'O';
-		char jetonActuel = joueur1;
-		bool jeuEnCours = true;
-
-		while (jeuEnCours)
-		{
-			Game.afficherGrille(); //Affiche grille
-
-			int col;
-			cout << "joueur " << jetonActuel << ", choisissez une colonne (0-6) : ";
-			cin >> col;
-
-			if (Game.JouerCoup(col, jetonActuel))
-			{
-				if (Game.verifierVictoire(jetonActuel))
-				{
-					Game.afficherGrille();
-					cout << "Le Joueur " << jetonActuel << " a gagné !\n";
-					jeuEnCours = false;
-				}
-				else
-				{
-					jetonActuel = (jetonActuel == joueur1) ? joueur2 : joueur1;
-				}
-			}
-		}
-		
-		cout << "Bienvenue dans le jeu PowerFour !" << endl;
-		// Logique du jeu ...
-	}
-
-	cout << "Fin du jeu" << endl;
-	return 0;
++
 
 	// Find a solution to let player input his value - Ask for his word
 
